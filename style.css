@@ -1,0 +1,94 @@
+body{
+  background-image: url(Image/Screenshot\ 2025-08-07\ 131604.png);
+  display: flex;
+  flex-direction: column;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 98vh;
+  width: auto;
+  color: white;
+
+}   
+h1{
+  color: white;
+  text-align: center;
+}
+#todo{
+  margin-top: 25px;
+  text-align: center;
+}
+#inputValue{
+  width: 35em;
+  height: 2.5em;
+  border-radius: 10px;
+  color: white;
+  background-color: transparent;
+  
+}
+#inputValue::placeholder{
+  color: white;
+  padding-right: 10px;
+}
+
+
+#submit{
+  margin-left: 10px;
+  background-color: rgb(43, 95, 112);
+  color: white;
+  height: 35px;
+  width: 100px;
+  font-size: 15px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+}
+
+#center{
+  display: flex;
+  justify-content: center;
+  /* flex-direction: column; */
+}
+
+#elementDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35em; /* Same as input field */
+  margin-top: 20px;
+}
+
+/* Each task container */
+.newElementDiv {
+  display: flex;
+  justify-content: space-between; /* Task left, buttons right */
+  align-items: center;
+  width: 100%; /* Take full width of parent */
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/* Task text */
+.taskValue {
+  flex: 1;
+  text-align: left;
+  margin-left: 5px;
+  font-size: 18px;
+}
+
+/* Button group */
+.btnGroup {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
+
+.hide{
+  display: none;
+}
+.strike {
+  text-decoration: line-through;
+}
