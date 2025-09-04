@@ -92,3 +92,67 @@ h1{
 .strike {
   text-decoration: line-through;
 }
+.editBtn {
+  background-color: #3498db; /* blue */
+  color: white;
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  width: auto;
+  cursor: pointer;
+}
+.editBtn:hover {
+  background-color: #2980b9; /* darker blue */
+}
+.deleteBtn {
+  background-color: #e74c3c; /* red */
+  color: white;
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  width: auto;
+  cursor: pointer;
+}
+.deleteBtn:hover {
+  background-color: #c0392b; /* darker red */
+}
+.doneBtn {
+background-color: #2ecc71; /* green */
+  color: white;
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  width: auto;
+  cursor: pointer; 
+}
+.doneBtn:hover {
+  background-color: #27ae60; /* darker green */
+}
+.saveBtn{
+   background-color: #3498db; /* blue */
+  color: white;
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  width: auto;
+  cursor: pointer;
+}
+.discardBtn{
+  background-color: red;
+  color: white;
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  width: auto;
+  cursor: pointer;
+}
+.editInput{
+  width: 30em;
+  height: 1.6em;
+  border-radius: 10px;
+  color: white;
+  background-color: transparent;
+}
+.editInput::placeholder{
+  color: white;
+}
