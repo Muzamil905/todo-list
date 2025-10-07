@@ -1,118 +1,129 @@
-let inputValue = document.getElementById('inputValue');
-let submitBTN = document.getElementById("submit");
+let input = document.getElementById('input');
+let form = document.getElementById("todo");
+let submit = document.getElementById('submit');
 let elementDiv = document.getElementById('elementDiv');
-let arrayOBJ = [];
-
-//Creating BTN and Task and pushing into array of objects
-submitBTN.addEventListener('click', ()=>{    
-    let task = inputValue.value.trim();
-    if(task == ""){
-        alert('Please enter the task!');
-        return;  
-    }
-
-    let object = {
-        id: arrayOBJ.length + 1,
-        toDo: task,
-        inState: false
-    };
-
-    let newElementDiv = document.createElement('div');
-    newElementDiv.setAttribute('data-id', object.id); 
-
-    newElementDiv.innerHTML = `
-        <span class="taskValue">${task}</span>
-        <span class="btnGroup">
-            <button class="editBtn">Edit</button>
-            <button class="deleteBtn">Delete</button>
-            <button class="doneBtn">Done</button>
-        </span>`;
-    elementDiv.appendChild(newElementDiv);
-    newElementDiv.classList.add('newElementDiv');
-    let btnGroup = newElementDiv.querySelector(".btnGroup")
-    console.log(btnGroup)
-    btnGroup.classList.add('.button')
-    
-    arrayOBJ.push(object);
-    console.log(arrayOBJ);
-
-    inputValue.value = "";
-});
+let taskArray = [];
 
 
-// Used Element Delegation here
-// Delete button functionality 
+function render() {
+    elementDiv.innerHTML = "";
+
+    taskArray.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.classList.add("newElementDiv");
+        taskElement.setAttribute("id", task.id);
+
+        if (task.done) {
+            taskElement.innerHTML = `
+                <span id="TaskTodo" style="text-decoration: line-through;"> ${task.ToDo} </span>
+                <span class="btnGroup hide">
+                    <button class='edit'>Edit</button>
+                    <button class='delete'>Delete</button>
+                    <button class='done'>Done</button>
+                </span>
+                <span><button class='undoneBtn'>Un-done</button></span>
+            `;
+        } else {
+            taskElement.innerHTML = `
+                <span id="TaskTodo">${task.ToDo}</span>
+                <span class="btnGroup">
+                    <button class='edit'>Edit</button>
+                    <button class='delete'>Delete</button>
+                    <button class='done'>Done</button>
+                </span>
+            `;
+        }
+
+        elementDiv.appendChild(taskElement);
+    });
+}
+
+form.addEventListener('submit', (event)=>{
+    event.preventDefault();
+    let inputValue = input.value.trim();
+    if(inputValue === ""){return};
+    let taskObject = {id : taskArray.length + 1, ToDo : inputValue,  done : false};
+    taskArray.push(taskObject);
+    localStorage.setItem('task', JSON.stringify(taskArray));
+    input.value = "";
+    render();
+})
+
 elementDiv.addEventListener("click", (event) => {
-    if(event.target.classList.contains("deleteBtn")){
-        const taskDiv = event.target.closest('.newElementDiv');
-        let taskID = parseInt(taskDiv.getAttribute("data-id"));
-        taskDiv.remove();
-        arrayOBJ = arrayOBJ.filter(t => t.id !== taskID); 
-        console.log(arrayOBJ)
+    if (event.target.classList.contains("delete")) {
+        let selectedTask = event.target.closest(".newElementDiv");
+        let selectedID = parseInt(selectedTask.getAttribute("id"));
+        taskArray = taskArray.filter(task => task.id !== selectedID);
+        localStorage.setItem('task', JSON.stringify(taskArray));
+        render();
     }
 
-// Edit button functionality
-
-    if(event.target.classList.contains("editBtn")){
-        const editTask = event.target.closest('.newElementDiv');
-        const taskValue = editTask.querySelector('.taskValue'); 
-        editTask.classList.add('hide');
-
-        let newTaskDiv = document.createElement('div');
-        newTaskDiv.innerHTML = `
-            <span><input type='text' placeholder="Something else on your mind? " class="editInput"></span> 
-            <span class='BtnGroup'>
-                <button class="saveBtn">Save</button>
-                <button class="discardBtn">Discard</button>
+    if (event.target.classList.contains("edit")) {
+        let doneTask = event.target.closest(".newElementDiv");
+        doneTask.classList.toggle('hide');
+        let editDiv = document.createElement('div');
+        editDiv.innerHTML = `
+            <input type="text" class="newInputField"> 
+            <span class="btnGroup"> 
+                <button class="save">Save</button> 
+                <button class="discard">Discard</button> 
             </span>`;
-        newTaskDiv.classList.add('newElementDiv');
-        editTask.after(newTaskDiv);     
-        let btnGroup = newTaskDiv.querySelector('.BtnGroup')
-        btnGroup.classList.add('#submit')                   
+        editDiv.classList.add("newElementDiv");
+        doneTask.insertAdjacentElement("afterend", editDiv);
 
-        let save = newTaskDiv.querySelector('.saveBtn');
-        let input = newTaskDiv.querySelector('.editInput');
-        let discard = newTaskDiv.querySelector('.discardBtn');
+        let save = editDiv.querySelector(".save");
+        let discard = editDiv.querySelector(".discard");
+        let newInputField = editDiv.querySelector(".newInputField");
 
         save.addEventListener('click', () => {
-            let newInput = input.value.trim();
-            if(newInput === ""){
-                alert("Please enter the new Task!");
+            let newInput = newInputField.value.trim();
+            if (newInput === "") {
+                alert("Please enter a task first");
+                newInputField.focus();
                 return;
             }
-            let clickedId = event.target.closest('.newElementDiv');
-            clickedId= parseInt(clickedId.getAttribute('data-id'))
-            console.log(clickedId);
-            taskValue.innerHTML = newInput;
-            editTask.classList.remove('hide');
-            newTaskDiv.remove();
 
-            let newArray = arrayOBJ.find(t => t.id === clickedId);
-            if(newArray){
-                newArray.toDo = newInput;
-            };
+            let TaskTodo = doneTask.querySelector("#TaskTodo");
+            TaskTodo.textContent = newInput;
+
+            let selectedID = parseInt(doneTask.getAttribute("id"));
+            let task = taskArray.find(t => t.id === selectedID);
+            if (task) task.ToDo = newInput;
+
+            localStorage.setItem("task", JSON.stringify(taskArray));
+            editDiv.remove();
+            doneTask.classList.remove('hide');
+            render();
         });
 
         discard.addEventListener('click', () => {
-            editTask.classList.remove('hide');
-            newTaskDiv.remove();
+            editDiv.remove();
+            doneTask.classList.remove('hide');
         });
     }
 
+    if (event.target.classList.contains('done')) {
+        let selectedTask = event.target.closest(".newElementDiv");
+        let selectedID = parseInt(selectedTask.getAttribute('id'));
+        let task = taskArray.find(t => t.id === selectedID);
+        if (task) task.done = true;
+        localStorage.setItem('task', JSON.stringify(taskArray));
+        render();
+    }
 
-// Done btn functionality 
-    if(event.target.classList.contains('doneBtn')){
-        const doneTask = event.target.closest(".newElementDiv");
-        let targetedTask = doneTask.querySelector('.taskValue');
-        let clickedID = event.target.closest('.newElementDiv');
-        clickedID = parseInt(clickedID.getAttribute('data-id'));
-        console.log(clickedID)
-        targetedTask.classList.toggle("strike")
-        let newArray = arrayOBJ.find(t=> t.id === clickedID);
-        if(newArray){
-            newArray.inState = true;
-        }
-        
+    if (event.target.classList.contains('undoneBtn')) {
+        let selectedTask = event.target.closest(".newElementDiv");
+        let selectedID = parseInt(selectedTask.getAttribute('id'));
+        let task = taskArray.find(t => t.id === selectedID);
+        if (task) task.done = false;
+        localStorage.setItem('task', JSON.stringify(taskArray));
+        render();
     }
 });
-console.log(arrayOBJ)
+
+
+let savedTask = JSON.parse(localStorage.getItem("task")) || [];
+if(savedTask){
+    taskArray = savedTask;
+    render();
+}
