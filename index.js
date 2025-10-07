@@ -103,9 +103,20 @@ elementDiv.addEventListener("click", (event) => {
     }
 
     if (event.target.classList.contains('done')) {
-        let selectedTask = event.target.closest(".newElementDiv");
-        let selectedID = parseInt(selectedTask.getAttribute('id'));
-        let task = taskArray.find(t => t.id === selectedID);
+    let selectedTask = event.target.closest(".newElementDiv");
+    let selectedID = parseInt(selectedTask.getAttribute('id'));
+    let task = taskArray.find(t => t.id === selectedID);
+    Toastify({
+        text: "Task Done",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "bottom",
+        position: "center", 
+        stopOnFocus: true, 
+        style: { background: "linear-gradient(to right, #00b09b, #96c93d)",},
+        onClick: function(){} 
+        }).showToast();
         if (task) task.done = true;
         localStorage.setItem('task', JSON.stringify(taskArray));
         render();
@@ -115,6 +126,17 @@ elementDiv.addEventListener("click", (event) => {
         let selectedTask = event.target.closest(".newElementDiv");
         let selectedID = parseInt(selectedTask.getAttribute('id'));
         let task = taskArray.find(t => t.id === selectedID);
+        Toastify({
+        text: "Task not completed",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "bottom", 
+        position: "center", 
+        stopOnFocus: true, 
+        style: { background: "linear-gradient(to right, #00b09b, #96c93d)",},
+        onClick: function(){} 
+        }).showToast();
         if (task) task.done = false;
         localStorage.setItem('task', JSON.stringify(taskArray));
         render();
