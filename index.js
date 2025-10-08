@@ -16,11 +16,6 @@ function render() {
         if (task.done) {
             taskElement.innerHTML = `
                 <span id="TaskTodo" style="text-decoration: line-through;"> ${task.ToDo} </span>
-                <span class="btnGroup hide">
-                    <button class='edit'>Edit</button>
-                    <button class='delete'>Delete</button>
-                    <button class='done'>Done</button>
-                </span>
                 <span><button class='undoneBtn'>Un-done</button></span>
             `;
         } else {
